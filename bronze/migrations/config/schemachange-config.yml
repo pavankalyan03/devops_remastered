@@ -1,7 +1,7 @@
 config-version: 1
-root-folder: './migrations'
+root-folder: '../scripts'
 modules-folder: null
-connections-file-path: './connections.toml'
+connections-file-path: '../connections.toml'
 connection-name: snowflake
 change-history-table: CHANGE_HISTORY
 create-change-history-table: true
@@ -9,3 +9,4 @@ autocommit: false
 verbose: true
 dry-run: false
 query-tag: 'schemachange'
+vars-file-path: '../vars.yml'

@@ -1,14 +1,12 @@
 Folder PATH listing
-Volume serial number is 5E4D-E9E7
+Volume serial number is 2668-D7F1
 C:.
 |   Readme.md
 |   struc.txt
 |   
 +---.github
 |   \---workflows
-|           deploy-dev.yml
-|           deploy-prod.yml
-|           deploy-test.yml
+|           deploy.yml
 |           
 +---bronze
 |   \---migrations
@@ -20,7 +18,6 @@ C:.
 |       \---scripts
 |           \---V1.0.0.0
 |                   001_create_table_customer.sql
-|                   002_create_table_orders.sql
 |                   
 +---gold
 |   \---migrations
