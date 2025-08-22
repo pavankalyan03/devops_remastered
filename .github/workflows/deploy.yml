@@ -33,7 +33,7 @@ jobs:
       - name: Export branch name for shell
         run: echo "GITHUB_REF_NAME=${GITHUB_REF_NAME}" >> $GITHUB_ENV
 
-      - name: Debug: Show branch and environment
+      - name: Debug Show branch and environment
         run: |
           echo "Branch: $GITHUB_REF_NAME"
           echo "Environment: ${{ github.ref_name == 'dev' && 'dev' || github.ref_name == 'test' && 'test' || 'prod' }}"
@@ -52,7 +52,7 @@ jobs:
           schema = "${GITHUB_REF_NAME}"
           EOF
 
-      - name: Debug: Verify connections.toml
+      - name: Debug Verify connections.toml
         run: |
           echo "Connections.toml content:"
           cat $GITHUB_WORKSPACE/connections.toml
@@ -65,7 +65,7 @@ jobs:
             grep -q '^schema:' $GITHUB_WORKSPACE/$layer/migrations/vars.yml || echo "schema: ${GITHUB_REF_NAME}" >> $GITHUB_WORKSPACE/$layer/migrations/vars.yml
           done
 
-      - name: Debug: Show updated vars.yml
+      - name: Debug Show updated vars.yml
         run: |
           for layer in bronze silver gold; do
             echo "vars.yml for $layer:"
@@ -79,7 +79,7 @@ jobs:
             sed -i "s|^connections-file-path:.*|connections-file-path: '$GITHUB_WORKSPACE/connections.toml'|" $GITHUB_WORKSPACE/$layer/migrations/config/schemachange-config.yml
           done
 
-      - name: Debug: Show updated schemachange-config.yml
+      - name: Debug Show updated schemachange-config.yml
         run: |
           for layer in bronze silver gold; do
             echo "schemachange-config.yml for $layer:"
