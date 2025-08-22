@@ -42,6 +42,14 @@ jobs:
           cp "$GITHUB_WORKSPACE/bronze/migrations/connections.toml" "$GITHUB_WORKSPACE/silver/migrations/"
           cp "$GITHUB_WORKSPACE/bronze/migrations/connections.toml" "$GITHUB_WORKSPACE/gold/migrations/"
 
+      - name: Debug connections.toml content per layer
+        run: |
+          for layer in bronze silver gold; do
+            echo "connections.toml content for $layer:"
+            cat "$GITHUB_WORKSPACE/$layer/migrations/connections.toml"
+            echo
+          done
+
       - name: Run migrations for bronze, silver, gold layers
         run: |
           for layer in bronze silver gold; do
@@ -84,6 +92,14 @@ jobs:
           cp "$GITHUB_WORKSPACE/bronze/migrations/connections.toml" "$GITHUB_WORKSPACE/silver/migrations/"
           cp "$GITHUB_WORKSPACE/bronze/migrations/connections.toml" "$GITHUB_WORKSPACE/gold/migrations/"
 
+      - name: Debug connections.toml content per layer
+        run: |
+          for layer in bronze silver gold; do
+            echo "connections.toml content for $layer:"
+            cat "$GITHUB_WORKSPACE/$layer/migrations/connections.toml"
+            echo
+          done
+
       - name: Run migrations for bronze, silver, gold layers in TEST
         run: |
           for layer in bronze silver gold; do
@@ -125,6 +141,14 @@ jobs:
 
           cp "$GITHUB_WORKSPACE/bronze/migrations/connections.toml" "$GITHUB_WORKSPACE/silver/migrations/"
           cp "$GITHUB_WORKSPACE/bronze/migrations/connections.toml" "$GITHUB_WORKSPACE/gold/migrations/"
+
+      - name: Debug connections.toml content per layer
+        run: |
+          for layer in bronze silver gold; do
+            echo "connections.toml content for $layer:"
+            cat "$GITHUB_WORKSPACE/$layer/migrations/connections.toml"
+            echo
+          done
 
       - name: Run migrations for bronze, silver, gold layers in PROD
         run: |
