@@ -1,0 +1,46 @@
+Folder PATH listing
+Volume serial number is 5E4D-E9E7
+C:.
+|   Readme.md
+|   struc.txt
+|   
++---.github
+|   \---workflows
+|           deploy-dev.yml
+|           deploy-prod.yml
+|           deploy-test.yml
+|           
++---bronze
+|   \---migrations
+|       |   var.yml
+|       |   
+|       +---config
+|       |       schemachange-config.yml
+|       |       
+|       \---scripts
+|           \---V1.0.0.0
+|                   001_create_table_customer.sql
+|                   002_create_table_orders.sql
+|                   
++---gold
+|   \---migrations
+|       |   var.yml
+|       |   
+|       +---config
+|       |       schemachange-config.yml
+|       |       
+|       \---scripts
+|           \---V1.0.0.0
+|                   001_create_aggreate_sales.sql
+|                   
+\---silver
+    \---migrations
+        |   var.yml
+        |   
+        +---config
+        |       schemachange-config.yml
+        |       
+        \---scripts
+            \---V1.0.0.0
+                    001_create_view_customer_ordes.sql
+                    

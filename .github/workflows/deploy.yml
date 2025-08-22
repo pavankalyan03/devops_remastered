@@ -1,0 +1,103 @@
+name: Deploy Migrations
+
+on:
+  push:
+    branches:
+      - dev
+      - test
+      - main
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    name: Deploy Layer Migrations
+
+    environment:
+      name: ${{ github.ref_name == 'dev' && 'dev' || github.ref_name == 'test' && 'test' || 'prod' }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install Schemachange
+        run: |
+          python -m pip install --upgrade pip
+          pip install schemachange
+
+      - name: Export branch name for shell
+        run: echo "GITHUB_REF_NAME=${GITHUB_REF_NAME}" >> $GITHUB_ENV
+
+      - name: Debug: Show branch and environment
+        run: |
+          echo "Branch: $GITHUB_REF_NAME"
+          echo "Environment: ${{ github.ref_name == 'dev' && 'dev' || github.ref_name == 'test' && 'test' || 'prod' }}"
+          echo "Workspace: $GITHUB_WORKSPACE"
+
+      - name: Create connections.toml dynamically
+        run: |
+          cat <<EOF > $GITHUB_WORKSPACE/connections.toml
+          [snowflake]
+          account = "${{ secrets.SNOWFLAKE_ACCOUNT }}"
+          user = "${{ secrets.SNOWFLAKE_USER }}"
+          password = "${{ secrets.SNOWFLAKE_PASSWORD }}"
+          role = "${{ secrets.SNOWFLAKE_ROLE }}"
+          warehouse = "${{ secrets.SNOWFLAKE_WAREHOUSE }}"
+          database = "${{ secrets.SNOWFLAKE_DATABASE }}"
+          schema = "${GITHUB_REF_NAME}"
+          EOF
+
+      - name: Debug: Verify connections.toml
+        run: |
+          echo "Connections.toml content:"
+          cat $GITHUB_WORKSPACE/connections.toml
+
+      - name: Update vars.yml per branch
+        run: |
+          set -e
+          for layer in bronze silver gold; do
+            sed -i "s|^schema:.*|schema: ${GITHUB_REF_NAME}|" $GITHUB_WORKSPACE/$layer/migrations/vars.yml || echo "schema not found, adding"
+            grep -q '^schema:' $GITHUB_WORKSPACE/$layer/migrations/vars.yml || echo "schema: ${GITHUB_REF_NAME}" >> $GITHUB_WORKSPACE/$layer/migrations/vars.yml
+          done
+
+      - name: Debug: Show updated vars.yml
+        run: |
+          for layer in bronze silver gold; do
+            echo "vars.yml for $layer:"
+            cat $GITHUB_WORKSPACE/$layer/migrations/vars.yml
+          done
+
+      - name: Update schemachange config paths
+        run: |
+          set -e
+          for layer in bronze silver gold; do
+            sed -i "s|^connections-file-path:.*|connections-file-path: '$GITHUB_WORKSPACE/connections.toml'|" $GITHUB_WORKSPACE/$layer/migrations/config/schemachange-config.yml
+          done
+
+      - name: Debug: Show updated schemachange-config.yml
+        run: |
+          for layer in bronze silver gold; do
+            echo "schemachange-config.yml for $layer:"
+            cat $GITHUB_WORKSPACE/$layer/migrations/config/schemachange-config.yml
+          done
+
+      - name: Dry-run migrations (verify only, no changes)
+        run: |
+          set -e
+          for layer in bronze silver gold; do
+            echo "Dry-run for layer: $layer"
+            schemachange run --config-file $GITHUB_WORKSPACE/$layer/migrations/config/schemachange-config.yml --dry-run
+          done
+
+      - name: Run Bronze/Silver/Gold migrations
+        run: |
+          set -e
+          for layer in bronze silver gold; do
+            echo "Running migrations for layer: $layer"
+            schemachange run --config-file $GITHUB_WORKSPACE/$layer/migrations/config/schemachange-config.yml
+          done
