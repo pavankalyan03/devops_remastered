@@ -46,7 +46,7 @@ jobs:
         run: |
           for layer in bronze silver gold; do
             echo "connections.toml content for $layer:"
-            cat "$GITHUB_WORKSPACE/$layer/migrations/connections.toml"
+            cat "$GITHUB_WORKSPACE/$layer/migrations/config/connections.toml"
             echo
           done
 
