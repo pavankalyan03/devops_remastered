@@ -28,8 +28,8 @@ jobs:
           python -m pip install --upgrade pip
           pip install schemachange
 
-      - name: Debug: Show branch
-        run: echo "Branch: $GITHUB_REF_NAME"
+      - name: Debug Show branch
+        run: echo "Branch $GITHUB_REF_NAME"
 
       - name: Create connections.toml dynamically
         run: |
@@ -44,7 +44,7 @@ jobs:
           schema = "DEV"
           EOT
 
-      - name: Debug: Verify connections.toml
+      - name: Debug Verify connections.toml
         run: cat $GITHUB_WORKSPACE/connections.toml
 
       - name: Create or update vars.yml per layer
@@ -61,7 +61,7 @@ jobs:
             fi
           done
 
-      - name: Debug: Show updated vars.yml
+      - name: Debug Show updated vars.yml
         run: |
           for layer in bronze silver gold; do
             echo "vars.yml for $layer:"
@@ -74,7 +74,7 @@ jobs:
             sed -i "s|^connections-file-path:.*|connections-file-path: '$GITHUB_WORKSPACE/connections.toml'|" $GITHUB_WORKSPACE/$layer/migrations/config/schemachange-config.yml
           done
 
-      - name: Debug: Show updated schemachange-config.yml
+      - name: Debug Show updated schemachange-config.yml
         run: |
           for layer in bronze silver gold; do
             echo "schemachange-config.yml for $layer:"
