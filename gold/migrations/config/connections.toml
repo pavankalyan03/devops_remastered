@@ -5,4 +5,4 @@ password = "${{ secrets.SNOWFLAKE_PASSWORD }}"
 role = "${{ secrets.SNOWFLAKE_ROLE }}"
 warehouse = "${{ secrets.SNOWFLAKE_WAREHOUSE }}"
 database = "APP_DB"   # replace with actual database
-schema = "BRONZE"       # replace with actual schema
+schema = "SILVER"       # replace with actual schema
