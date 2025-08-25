@@ -28,19 +28,16 @@ jobs:
           python -m pip install --upgrade pip
           pip install schemachange
 
-      - name: Create connections.toml for all layers (DEV)
-        run: |
-          for layer in bronze silver gold; do
-            mkdir -p "$GITHUB_WORKSPACE/$layer/migrations/config/"
-            cat > "$GITHUB_WORKSPACE/$layer/migrations/config/connections.toml" <<'EOT'
-[snowflake]
-account = "${{ secrets.SNOWFLAKE_ACCOUNT }}"
-user = "${{ secrets.SNOWFLAKE_USER }}"
-password = "${{ secrets.SNOWFLAKE_PASSWORD }}"
-role = "${{ secrets.SNOWFLAKE_ROLE }}"
-warehouse = "${{ secrets.SNOWFLAKE_WAREHOUSE }}"
-EOT
-          done
+      - name: Create connections.toml dynamically with TEST schema
+        run: |
+          cat <<EOT > "$GITHUB_WORKSPACE/bronze/migrations/connections.toml"
+          [snowflake]
+          account = "${{ secrets.SNOWFLAKE_ACCOUNT }}"
+          user = "${{ secrets.SNOWFLAKE_USER }}"
+          password = "${{ secrets.SNOWFLAKE_PASSWORD }}"
+          role = "${{ secrets.SNOWFLAKE_ROLE }}"
+          warehouse = "${{ secrets.SNOWFLAKE_WAREHOUSE }}"
+          EOT
 
       - name: Debug connections.toml content per layer
         run: |
@@ -90,19 +87,20 @@ EOT
           python -m pip install --upgrade pip
           pip install schemachange
 
-      - name: Create connections.toml for all layers (TEST)
-        run: |
-          for layer in bronze silver gold; do
-            mkdir -p "$GITHUB_WORKSPACE/$layer/migrations/config/"
-            cat > "$GITHUB_WORKSPACE/$layer/migrations/config/connections.toml" <<'EOT'
-[snowflake]
-account = "${{ secrets.SNOWFLAKE_ACCOUNT }}"
-user = "${{ secrets.SNOWFLAKE_USER }}"
-password = "${{ secrets.SNOWFLAKE_PASSWORD }}"
-role = "${{ secrets.SNOWFLAKE_ROLE }}"
-warehouse = "${{ secrets.SNOWFLAKE_WAREHOUSE }}"
-EOT
-          done
+      - name: Create connections.toml dynamically with PROD schema
+        run: |
+          cat <<EOT > "$GITHUB_WORKSPACE/bronze/migrations/connections.toml"
+          [snowflake]
+          account = "${{ secrets.SNOWFLAKE_ACCOUNT }}"
+          user = "${{ secrets.SNOWFLAKE_USER }}"
+          password = "${{ secrets.SNOWFLAKE_PASSWORD }}"
+          role = "${{ secrets.SNOWFLAKE_ROLE }}"
+          warehouse = "${{ secrets.SNOWFLAKE_WAREHOUSE }}"
+          EOT
+
+
+          cp "$GITHUB_WORKSPACE/bronze/migrations/connections.toml" "$GITHUB_WORKSPACE/silver/migrations/"
+          cp "$GITHUB_WORKSPACE/bronze/migrations/connections.toml" "$GITHUB_WORKSPACE/gold/migrations/"
 
       - name: Debug connections.toml content per layer
         run: |
@@ -152,19 +150,20 @@ EOT
           python -m pip install --upgrade pip
           pip install schemachange
 
-      - name: Create connections.toml for all layers (PROD)
-        run: |
-          for layer in bronze silver gold; do
-            mkdir -p "$GITHUB_WORKSPACE/$layer/migrations/config/"
-            cat > "$GITHUB_WORKSPACE/$layer/migrations/config/connections.toml" <<'EOT'
-[snowflake]
-account = "${{ secrets.SNOWFLAKE_ACCOUNT }}"
-user = "${{ secrets.SNOWFLAKE_USER }}"
-password = "${{ secrets.SNOWFLAKE_PASSWORD }}"
-role = "${{ secrets.SNOWFLAKE_ROLE }}"
-warehouse = "${{ secrets.SNOWFLAKE_WAREHOUSE }}"
-EOT
-          done
+      - name: Create connections.toml dynamically with PROD schema
+        run: |
+          cat <<EOT > "$GITHUB_WORKSPACE/bronze/migrations/connections.toml"
+          [snowflake]
+          account = "${{ secrets.SNOWFLAKE_ACCOUNT }}"
+          user = "${{ secrets.SNOWFLAKE_USER }}"
+          password = "${{ secrets.SNOWFLAKE_PASSWORD }}"
+          role = "${{ secrets.SNOWFLAKE_ROLE }}"
+          warehouse = "${{ secrets.SNOWFLAKE_WAREHOUSE }}"
+          EOT
+
+
+          cp "$GITHUB_WORKSPACE/bronze/migrations/connections.toml" "$GITHUB_WORKSPACE/silver/migrations/"
+          cp "$GITHUB_WORKSPACE/bronze/migrations/connections.toml" "$GITHUB_WORKSPACE/gold/migrations/"
 
       - name: Debug connections.toml content per layer
         run: |
