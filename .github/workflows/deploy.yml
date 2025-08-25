@@ -28,11 +28,11 @@ jobs:
           python -m pip install --upgrade pip
           pip install schemachange
 
-      - name: Create connections.toml for all layers (TEST)
+      - name: Create connections.toml for all layers (DEV)
         run: |
           for layer in bronze silver gold; do
             mkdir -p "$GITHUB_WORKSPACE/$layer/migrations/config/"
-            cat <<EOT > "$GITHUB_WORKSPACE/$layer/migrations/config/connections.toml"
+            cat > "$GITHUB_WORKSPACE/$layer/migrations/config/connections.toml" <<'EOT'
 [snowflake]
 account = "${{ secrets.SNOWFLAKE_ACCOUNT }}"
 user = "${{ secrets.SNOWFLAKE_USER }}"
@@ -94,7 +94,7 @@ EOT
         run: |
           for layer in bronze silver gold; do
             mkdir -p "$GITHUB_WORKSPACE/$layer/migrations/config/"
-            cat <<EOT > "$GITHUB_WORKSPACE/$layer/migrations/config/connections.toml"
+            cat > "$GITHUB_WORKSPACE/$layer/migrations/config/connections.toml" <<'EOT'
 [snowflake]
 account = "${{ secrets.SNOWFLAKE_ACCOUNT }}"
 user = "${{ secrets.SNOWFLAKE_USER }}"
@@ -152,11 +152,11 @@ EOT
           python -m pip install --upgrade pip
           pip install schemachange
 
-      - name: Create connections.toml for all layers (TEST)
+      - name: Create connections.toml for all layers (PROD)
         run: |
           for layer in bronze silver gold; do
             mkdir -p "$GITHUB_WORKSPACE/$layer/migrations/config/"
-            cat <<EOT > "$GITHUB_WORKSPACE/$layer/migrations/config/connections.toml"
+            cat > "$GITHUB_WORKSPACE/$layer/migrations/config/connections.toml" <<'EOT'
 [snowflake]
 account = "${{ secrets.SNOWFLAKE_ACCOUNT }}"
 user = "${{ secrets.SNOWFLAKE_USER }}"
