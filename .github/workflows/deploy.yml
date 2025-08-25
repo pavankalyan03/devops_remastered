@@ -28,35 +28,47 @@ jobs:
           python -m pip install --upgrade pip
           pip install schemachange
 
-      - name: Create connections.toml dynamically
+      - name: Create connections.toml for all layers (DEV)
         run: |
-          cat <<EOT > "$GITHUB_WORKSPACE/bronze/migrations/config/connections.toml"
-          [snowflake]
-          account = "${{ secrets.SNOWFLAKE_ACCOUNT }}"
-          user = "${{ secrets.SNOWFLAKE_USER }}"
-          password = "${{ secrets.SNOWFLAKE_PASSWORD }}"
-          role = "${{ secrets.SNOWFLAKE_ROLE }}"
-          warehouse = "${{ secrets.SNOWFLAKE_WAREHOUSE }}"
-          EOT
-
-          cp "$GITHUB_WORKSPACE/bronze/migrations/config/connections.toml" "$GITHUB_WORKSPACE/silver/migrations/config/"
-          cp "$GITHUB_WORKSPACE/bronze/migrations/config/connections.toml" "$GITHUB_WORKSPACE/gold/migrations/config/"
+          for layer in bronze silver gold; do
+            mkdir -p "$GITHUB_WORKSPACE/$layer/migrations/config/"
+            cat <<EOT > "$GITHUB_WORKSPACE/$layer/migrations/config/connections.toml"
+            [snowflake]
+            account = "${{ secrets.SNOWFLAKE_ACCOUNT }}"
+            user = "${{ secrets.SNOWFLAKE_USER }}"
+            password = "${{ secrets.SNOWFLAKE_PASSWORD }}"
+            role = "${{ secrets.SNOWFLAKE_ROLE }}"
+            warehouse = "${{ secrets.SNOWFLAKE_WAREHOUSE }}"
+            EOT
+          done
 
       - name: Debug connections.toml content per layer
         run: |
           for layer in bronze silver gold; do
-            echo "connections.toml content for $layer:"
+            echo "connections.toml for $layer:"
             cat "$GITHUB_WORKSPACE/$layer/migrations/config/connections.toml"
-            echo
           done
 
       - name: Run migrations for bronze, silver, gold layers
         run: |
           for layer in bronze silver gold; do
             echo "Dry-run migrations for $layer in DEV schema"
-            schemachange deploy -c "$GITHUB_WORKSPACE/$layer/migrations/config/schemachange-config.yml" --dry-run --change-history-table APP_DB.DEV.CHANGE_HISTORY --query-tag "schemachange-dev"
+            schemachange deploy \
+              --config-folder "$GITHUB_WORKSPACE/$layer/migrations/config" \
+              --config-file-name schemachange-config.yml \
+              --connections-file-path "$GITHUB_WORKSPACE/$layer/migrations/config/connections.toml" \
+              --connection-name snowflake \
+              --dry-run \
+              --change-history-table APP_DB.DEV.CHANGE_HISTORY \
+              --query-tag "schemachange-dev"
             echo "Running migrations for $layer in DEV schema"
-            schemachange deploy -c "$GITHUB_WORKSPACE/$layer/migrations/config/schemachange-config.yml" --change-history-table APP_DB.DEV.CHANGE_HISTORY --query-tag "schemachange-dev"
+            schemachange deploy \
+              --config-folder "$GITHUB_WORKSPACE/$layer/migrations/config" \
+              --config-file-name schemachange-config.yml \
+              --connections-file-path "$GITHUB_WORKSPACE/$layer/migrations/config/connections.toml" \
+              --connection-name snowflake \
+              --change-history-table APP_DB.DEV.CHANGE_HISTORY \
+              --query-tag "schemachange-dev"
           done
 
   deploy-test:
@@ -78,35 +90,47 @@ jobs:
           python -m pip install --upgrade pip
           pip install schemachange
 
-      - name: Create connections.toml dynamically with TEST schema
+      - name: Create connections.toml for all layers (TEST)
         run: |
-          cat <<EOT > "$GITHUB_WORKSPACE/bronze/migrations/connections.toml"
-          [snowflake]
-          account = "${{ secrets.SNOWFLAKE_ACCOUNT }}"
-          user = "${{ secrets.SNOWFLAKE_USER }}"
-          password = "${{ secrets.SNOWFLAKE_PASSWORD }}"
-          role = "${{ secrets.SNOWFLAKE_ROLE }}"
-          warehouse = "${{ secrets.SNOWFLAKE_WAREHOUSE }}"
-          EOT
-
-          cp "$GITHUB_WORKSPACE/bronze/migrations/connections.toml" "$GITHUB_WORKSPACE/silver/migrations/"
-          cp "$GITHUB_WORKSPACE/bronze/migrations/connections.toml" "$GITHUB_WORKSPACE/gold/migrations/"
+          for layer in bronze silver gold; do
+            mkdir -p "$GITHUB_WORKSPACE/$layer/migrations/config/"
+            cat <<EOT > "$GITHUB_WORKSPACE/$layer/migrations/config/connections.toml"
+            [snowflake]
+            account = "${{ secrets.SNOWFLAKE_ACCOUNT }}"
+            user = "${{ secrets.SNOWFLAKE_USER }}"
+            password = "${{ secrets.SNOWFLAKE_PASSWORD }}"
+            role = "${{ secrets.SNOWFLAKE_ROLE }}"
+            warehouse = "${{ secrets.SNOWFLAKE_WAREHOUSE }}"
+            EOT
+          done
 
       - name: Debug connections.toml content per layer
         run: |
           for layer in bronze silver gold; do
-            echo "connections.toml content for $layer:"
-            cat "$GITHUB_WORKSPACE/$layer/migrations/connections.toml"
-            echo
+            echo "connections.toml for $layer:"
+            cat "$GITHUB_WORKSPACE/$layer/migrations/config/connections.toml"
           done
 
-      - name: Run migrations for bronze, silver, gold layers in TEST
+      - name: Run migrations for bronze, silver, gold layers
         run: |
           for layer in bronze silver gold; do
             echo "Dry-run migrations for $layer in TEST schema"
-            schemachange deploy -c "$GITHUB_WORKSPACE/$layer/migrations/config/schemachange-config.yml" --dry-run --change-history-table APP_DB.TEST.CHANGE_HISTORY --query-tag "schemachange-test"
+            schemachange deploy \
+              --config-folder "$GITHUB_WORKSPACE/$layer/migrations/config" \
+              --config-file-name schemachange-config.yml \
+              --connections-file-path "$GITHUB_WORKSPACE/$layer/migrations/config/connections.toml" \
+              --connection-name snowflake \
+              --dry-run \
+              --change-history-table APP_DB.TEST.CHANGE_HISTORY \
+              --query-tag "schemachange-test"
             echo "Running migrations for $layer in TEST schema"
-            schemachange deploy -c "$GITHUB_WORKSPACE/$layer/migrations/config/schemachange-config.yml" --change-history-table APP_DB.TEST.CHANGE_HISTORY --query-tag "schemachange-test"
+            schemachange deploy \
+              --config-folder "$GITHUB_WORKSPACE/$layer/migrations/config" \
+              --config-file-name schemachange-config.yml \
+              --connections-file-path "$GITHUB_WORKSPACE/$layer/migrations/config/connections.toml" \
+              --connection-name snowflake \
+              --change-history-table APP_DB.TEST.CHANGE_HISTORY \
+              --query-tag "schemachange-test"
           done
 
   deploy-prod:
@@ -128,33 +152,45 @@ jobs:
           python -m pip install --upgrade pip
           pip install schemachange
 
-      - name: Create connections.toml dynamically with PROD schema
+      - name: Create connections.toml for all layers (PROD)
         run: |
-          cat <<EOT > "$GITHUB_WORKSPACE/bronze/migrations/connections.toml"
-          [snowflake]
-          account = "${{ secrets.SNOWFLAKE_ACCOUNT }}"
-          user = "${{ secrets.SNOWFLAKE_USER }}"
-          password = "${{ secrets.SNOWFLAKE_PASSWORD }}"
-          role = "${{ secrets.SNOWFLAKE_ROLE }}"
-          warehouse = "${{ secrets.SNOWFLAKE_WAREHOUSE }}"
-          EOT
-
-          cp "$GITHUB_WORKSPACE/bronze/migrations/connections.toml" "$GITHUB_WORKSPACE/silver/migrations/"
-          cp "$GITHUB_WORKSPACE/bronze/migrations/connections.toml" "$GITHUB_WORKSPACE/gold/migrations/"
+          for layer in bronze silver gold; do
+            mkdir -p "$GITHUB_WORKSPACE/$layer/migrations/config/"
+            cat <<EOT > "$GITHUB_WORKSPACE/$layer/migrations/config/connections.toml"
+            [snowflake]
+            account = "${{ secrets.SNOWFLAKE_ACCOUNT }}"
+            user = "${{ secrets.SNOWFLAKE_USER }}"
+            password = "${{ secrets.SNOWFLAKE_PASSWORD }}"
+            role = "${{ secrets.SNOWFLAKE_ROLE }}"
+            warehouse = "${{ secrets.SNOWFLAKE_WAREHOUSE }}"
+            EOT
+          done
 
       - name: Debug connections.toml content per layer
         run: |
           for layer in bronze silver gold; do
-            echo "connections.toml content for $layer:"
-            cat "$GITHUB_WORKSPACE/$layer/migrations/connections.toml"
-            echo
+            echo "connections.toml for $layer:"
+            cat "$GITHUB_WORKSPACE/$layer/migrations/config/connections.toml"
           done
 
-      - name: Run migrations for bronze, silver, gold layers in PROD
+      - name: Run migrations for bronze, silver, gold layers
         run: |
           for layer in bronze silver gold; do
             echo "Dry-run migrations for $layer in PROD schema"
-            schemachange deploy -c "$GITHUB_WORKSPACE/$layer/migrations/config/schemachange-config.yml" --dry-run --change-history-table APP_DB.PROD.CHANGE_HISTORY --query-tag "schemachange-prod"
+            schemachange deploy \
+              --config-folder "$GITHUB_WORKSPACE/$layer/migrations/config" \
+              --config-file-name schemachange-config.yml \
+              --connections-file-path "$GITHUB_WORKSPACE/$layer/migrations/config/connections.toml" \
+              --connection-name snowflake \
+              --dry-run \
+              --change-history-table APP_DB.PROD.CHANGE_HISTORY \
+              --query-tag "schemachange-prod"
             echo "Running migrations for $layer in PROD schema"
-            schemachange deploy -c "$GITHUB_WORKSPACE/$layer/migrations/config/schemachange-config.yml" --change-history-table APP_DB.PROD.CHANGE_HISTORY --query-tag "schemachange-prod"
+            schemachange deploy \
+              --config-folder "$GITHUB_WORKSPACE/$layer/migrations/config" \
+              --config-file-name schemachange-config.yml \
+              --connections-file-path "$GITHUB_WORKSPACE/$layer/migrations/config/connections.toml" \
+              --connection-name snowflake \
+              --change-history-table APP_DB.PROD.CHANGE_HISTORY \
+              --query-tag "schemachange-prod"
           done
