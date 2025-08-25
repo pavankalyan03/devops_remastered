@@ -41,7 +41,7 @@ jobs:
             password = "${{ secrets.SNOWFLAKE_PASSWORD }}"
             role = "${{ secrets.SNOWFLAKE_ROLE }}"
             warehouse = "${{ secrets.SNOWFLAKE_WAREHOUSE }}"
-            EOT
+          'EOT'
           done
 
       - name: Debug connections.toml content per layer
@@ -175,7 +175,7 @@ jobs:
             password = "${{ secrets.SNOWFLAKE_PASSWORD }}"
             role = "${{ secrets.SNOWFLAKE_ROLE }}"
             warehouse = "${{ secrets.SNOWFLAKE_WAREHOUSE }}"
-            EOT
+          EOT
           done
 
       - name: Debug connections.toml content per layer
