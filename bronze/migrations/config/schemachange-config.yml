@@ -5,6 +5,8 @@ connection-name: bronze
 change-history-table: bronze_db.metadata.schemachange.change_history
 vars:
   CUSTOMER_TABLE: 'CUSTOMERS'
+  DATABASE : APP_DB
+  SCHEMA : BRONZE
   secrets:
     CUSTOMER_SECRET: 'super_secret_value'
 create-change-history-table: true

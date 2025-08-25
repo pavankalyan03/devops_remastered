@@ -11,42 +11,25 @@ on:
 jobs:
   deploy-dev:
     runs-on: ubuntu-latest
-    if: ${{ github.ref_name == 'dev' }}
+    if: github.ref_name == 'dev'
     environment: dev
     name: Deploy to DEV
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v4
         with:
           python-version: '3.11'
 
       - name: Install Schemachange
         run: |
-          set -euo pipefail
           python -m pip install --upgrade pip
           pip install schemachange
 
-      - name: Create connections.toml per layer (DEV)
-        run: |
-          set -euo pipefail
-          for layer in bronze silver gold; do
-            mkdir -p "$GITHUB_WORKSPACE/$layer/migrations/config"
-            cat > "$GITHUB_WORKSPACE/$layer/migrations/config/connections.toml" <<'EOT'
-            [snowflake]
-            account = "${{ secrets.SNOWFLAKE_ACCOUNT }}"
-            user = "${{ secrets.SNOWFLAKE_USER }}"
-            password = "${{ secrets.SNOWFLAKE_PASSWORD }}"
-            role = "${{ secrets.SNOWFLAKE_ROLE }}"
-            warehouse = "${{ secrets.SNOWFLAKE_WAREHOUSE }}"
-          'EOT'
-          done
-
       - name: Debug connections.toml content per layer
         run: |
-          set -euo pipefail
           for layer in bronze silver gold; do
             echo "connections.toml for $layer:"
             cat "$GITHUB_WORKSPACE/$layer/migrations/config/connections.toml"
@@ -54,7 +37,6 @@ jobs:
 
       - name: Run migrations for bronze, silver, gold layers
         run: |
-          set -euo pipefail
           for layer in bronze silver gold; do
             echo "Dry-run migrations for $layer in DEV schema"
             schemachange deploy \
@@ -65,7 +47,6 @@ jobs:
               --dry-run \
               --change-history-table APP_DB.DEV.CHANGE_HISTORY \
               --query-tag "schemachange-dev"
-
             echo "Running migrations for $layer in DEV schema"
             schemachange deploy \
               --config-folder "$GITHUB_WORKSPACE/$layer/migrations/config" \
@@ -78,42 +59,25 @@ jobs:
 
   deploy-test:
     runs-on: ubuntu-latest
-    if: ${{ github.ref_name == 'test' }}
+    if: github.ref_name == 'test'
     environment: test
     name: Deploy to TEST
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v4
         with:
           python-version: '3.11'
 
       - name: Install Schemachange
         run: |
-          set -euo pipefail
           python -m pip install --upgrade pip
           pip install schemachange
 
-      - name: Create connections.toml per layer (TEST)
-        run: |
-          set -euo pipefail
-          for layer in bronze silver gold; do
-            mkdir -p "$GITHUB_WORKSPACE/$layer/migrations/config"
-            cat > "$GITHUB_WORKSPACE/$layer/migrations/config/connections.toml" <<'EOT'
-            [snowflake]
-            account = "${{ secrets.SNOWFLAKE_ACCOUNT }}"
-            user = "${{ secrets.SNOWFLAKE_USER }}"
-            password = "${{ secrets.SNOWFLAKE_PASSWORD }}"
-            role = "${{ secrets.SNOWFLAKE_ROLE }}"
-            warehouse = "${{ secrets.SNOWFLAKE_WAREHOUSE }}"
-            EOT
-          done
-
       - name: Debug connections.toml content per layer
         run: |
-          set -euo pipefail
           for layer in bronze silver gold; do
             echo "connections.toml for $layer:"
             cat "$GITHUB_WORKSPACE/$layer/migrations/config/connections.toml"
@@ -121,7 +85,6 @@ jobs:
 
       - name: Run migrations for bronze, silver, gold layers
         run: |
-          set -euo pipefail
           for layer in bronze silver gold; do
             echo "Dry-run migrations for $layer in TEST schema"
             schemachange deploy \
@@ -132,7 +95,6 @@ jobs:
               --dry-run \
               --change-history-table APP_DB.TEST.CHANGE_HISTORY \
               --query-tag "schemachange-test"
-
             echo "Running migrations for $layer in TEST schema"
             schemachange deploy \
               --config-folder "$GITHUB_WORKSPACE/$layer/migrations/config" \
@@ -145,42 +107,25 @@ jobs:
 
   deploy-prod:
     runs-on: ubuntu-latest
-    if: ${{ github.ref_name == 'main' }}
+    if: github.ref_name == 'main'
     environment: prod
     name: Deploy to PROD
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v4
         with:
           python-version: '3.11'
 
       - name: Install Schemachange
         run: |
-          set -euo pipefail
           python -m pip install --upgrade pip
           pip install schemachange
 
-      - name: Create connections.toml per layer (PROD)
-        run: |
-          set -euo pipefail
-          for layer in bronze silver gold; do
-            mkdir -p "$GITHUB_WORKSPACE/$layer/migrations/config"
-            cat > "$GITHUB_WORKSPACE/$layer/migrations/config/connections.toml" <<'EOT'
-            [snowflake]
-            account = "${{ secrets.SNOWFLAKE_ACCOUNT }}"
-            user = "${{ secrets.SNOWFLAKE_USER }}"
-            password = "${{ secrets.SNOWFLAKE_PASSWORD }}"
-            role = "${{ secrets.SNOWFLAKE_ROLE }}"
-            warehouse = "${{ secrets.SNOWFLAKE_WAREHOUSE }}"
-          EOT
-          done
-
       - name: Debug connections.toml content per layer
         run: |
-          set -euo pipefail
           for layer in bronze silver gold; do
             echo "connections.toml for $layer:"
             cat "$GITHUB_WORKSPACE/$layer/migrations/config/connections.toml"
@@ -188,7 +133,6 @@ jobs:
 
       - name: Run migrations for bronze, silver, gold layers
         run: |
-          set -euo pipefail
           for layer in bronze silver gold; do
             echo "Dry-run migrations for $layer in PROD schema"
             schemachange deploy \
@@ -199,7 +143,6 @@ jobs:
               --dry-run \
               --change-history-table APP_DB.PROD.CHANGE_HISTORY \
               --query-tag "schemachange-prod"
-
             echo "Running migrations for $layer in PROD schema"
             schemachange deploy \
               --config-folder "$GITHUB_WORKSPACE/$layer/migrations/config" \

@@ -1,5 +1,0 @@
-customer_table: CUSTOMER
-orders_table: ORDERS
-warehouse: COMPUTE_WH
-database: MY_DB
-schema: BRONZE
