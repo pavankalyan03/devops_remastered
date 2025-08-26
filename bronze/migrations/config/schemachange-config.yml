@@ -1,5 +1,5 @@
 config-version: 1
-root-folder: '../scripts'
+root-folder: './scripts'
 connections-file-path: './connections.toml'
 connection-name: bronze
 change-history-table: BRONZE.DEV.change_history
