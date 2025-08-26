@@ -98,15 +98,18 @@ jobs:
 
       - name: Deploy to ${{ matrix.layer }}
         run: |
-          schemachange deploy \
-            -f "$GITHUB_WORKSPACE/${{ matrix.layer }}/migrations" \
-            --config-folder "$GITHUB_WORKSPACE/${{ matrix.layer }}/migrations/config" \
-            --config-file-name schemachange-config.yml \
-            --connections-file-path "$GITHUB_WORKSPACE/${{ matrix.layer }}/migrations/config/connections.toml" \
-            --connection-name snowflake \
-            --change-history-table "${{ matrix.layer | upper }}.DEV.CHANGE_HISTORY" \
-            --query-tag "schemachange-${{ matrix.layer }}" \
-            --verbose
+          for layer in bronze silver gold; do
+            echo "🚀 Deploying $layer layer..."
+            schemachange deploy \
+              -f "$GITHUB_WORKSPACE/$layer/migrations" \
+              --config-folder "$GITHUB_WORKSPACE/$layer/migrations/config" \
+              --config-file-name schemachange-config.yml \
+              --connections-file-path "$GITHUB_WORKSPACE/$layer/migrations/config/connections.toml" \
+              --connection-name snowflake \
+              --change-history-table "$layer.DEV.CHANGE_HISTORY" \
+              --query-tag "schemachange-$layer" \
+              --verbose
+          done
 
       # - name: Run migrations 
 
