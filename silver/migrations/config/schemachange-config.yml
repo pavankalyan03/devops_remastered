@@ -1,6 +1,6 @@
 config-version: 1
-root-folder: './scripts'
-connections-file-path: './connections.toml'
+root-folder: ../scripts
+connections-file-path: ./connections.toml
 connection-name: gold
 change-history-table: GOLD.DEV.change_history
 vars:
