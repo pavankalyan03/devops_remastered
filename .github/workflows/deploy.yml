@@ -91,6 +91,7 @@ jobs:
       - name: Deploy Bronze
         run: |
           schemachange deploy \
+            --root-folder bronze/migrations/scripts \
             --config-folder bronze/migrations/config \
             --config-file-name schemachange-config.yml \
             --connections-file-path bronze/migrations/config/connections.toml \
