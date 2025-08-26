@@ -95,7 +95,6 @@ jobs:
             --config-file-name schemachange-config.yml \
             --connections-file-path bronze/migrations/config/connections.toml \
             --connection-name snowflake \
-            --modules-folder bronze/migrations/scripts \
             --change-history-table BRONZE.DEV.CHANGE_HISTORY \
             --query-tag "schemachange-dev"
 
