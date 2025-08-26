@@ -1,5 +1,5 @@
 config-version: 1
-root-folder: ..
+root-folder: .
 modules-folder: scripts
 connections-file-path: ./connections.toml
 connection-name: gold
