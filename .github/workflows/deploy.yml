@@ -39,20 +39,24 @@ jobs:
         run: |
           for layer in bronze silver gold; do
             echo "Dry-run migrations for $layer in DEV schema"
+
             schemachange deploy \
-              --config-folder "$GITHUB_WORKSPACE/$layer/migrations" \
-              --config-file-name config/schemachange-config.yml \
+              --config-folder "$GITHUB_WORKSPACE/$layer/migrations/config" \
+              --config-file-name schemachange-config.yml \
               --connections-file-path "$GITHUB_WORKSPACE/$layer/migrations/config/connections.toml" \
               --connection-name snowflake \
-              --dry-run \
+              --modules-folder "$GITHUB_WORKSPACE/$layer/migrations/scripts" \
               --change-history-table BRONZE.DEV.CHANGE_HISTORY \
+              --dry-run
               --query-tag "schemachange-dev"
+
             echo "Running migrations for $layer in DEV schema"
             schemachange deploy \
-              --config-folder "$GITHUB_WORKSPACE/$layer/migrations" \
-              --config-file-name config/schemachange-config.yml \
+              --config-folder "$GITHUB_WORKSPACE/$layer/migrations/config" \
+              --config-file-name schemachange-config.yml \
               --connections-file-path "$GITHUB_WORKSPACE/$layer/migrations/config/connections.toml" \
               --connection-name snowflake \
+              --modules-folder "$GITHUB_WORKSPACE/$layer/migrations/scripts" \
               --change-history-table BRONZE.DEV.CHANGE_HISTORY \
               --query-tag "schemachange-dev"
           done
