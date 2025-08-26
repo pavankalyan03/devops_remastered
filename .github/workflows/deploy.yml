@@ -13,6 +13,12 @@ jobs:
     runs-on: ubuntu-latest
     if: github.ref_name == 'dev'
     environment: dev
+    env:
+      SNOWFLAKE_ACCOUNT: ${{ secrets.SNOWFLAKE_ACCOUNT }}
+      SNOWFLAKE_USER: ${{ secrets.SNOWFLAKE_USER }}
+      SNOWFLAKE_PASSWORD: ${{ secrets.SNOWFLAKE_PASSWORD }}
+
+
     name: Deploy to DEV
     steps:
       - name: Checkout repository
@@ -35,36 +41,41 @@ jobs:
             cat "$GITHUB_WORKSPACE/$layer/migrations/config/connections.toml"
           done
 
-      - name: Run migrations for bronze, silver, gold layers
-
-        env:
-          SNOWFLAKE_ACCOUNT: ${{ secrets.SNOWFLAKE_ACCOUNT }}
-          SNOWFLAKE_USER: ${{ secrets.SNOWFLAKE_USER }}
-          SNOWFLAKE_PASSWORD: ${{ secrets.SNOWFLAKE_PASSWORD }}
-          SNOWFLAKE_ROLE: ${{ secrets.SNOWFLAKE_ROLE }}
-          SNOWFLAKE_WAREHOUSE: ${{ secrets.SNOWFLAKE_WAREHOUSE }}
+      - name: Deploy Bronze
         run: |
-          for layer in bronze silver gold; do
-            echo "Dry-run migrations for $layer in DEV schema"
-            schemachange deploy \
-              --config-folder "$GITHUB_WORKSPACE/$layer/migrations/config" \
-              --config-file-name schemachange-config.yml \
-              --connections-file-path "$GITHUB_WORKSPACE/$layer/migrations/config/connections.toml" \
-              --connection-name snowflake \
-              --modules-folder "$GITHUB_WORKSPACE/$layer/migrations/scripts" \
-              --change-history-table BRONZE.DEV.CHANGE_HISTORY \
-              --dry-run
-              --query-tag "schemachange-dev"
-            echo "Running migrations for $layer in DEV schema"
-            schemachange deploy \
-              --config-folder "$GITHUB_WORKSPACE/$layer/migrations/config" \
-              --config-file-name schemachange-config.yml \
-              --connections-file-path "$GITHUB_WORKSPACE/$layer/migrations/config/connections.toml" \
-              --connection-name snowflake \
-              --modules-folder "$GITHUB_WORKSPACE/$layer/migrations/scripts" \
-              --change-history-table BRONZE.DEV.CHANGE_HISTORY \
-              --query-tag "schemachange-dev"
-          done
+          schemachange deploy \
+            --config-folder bronze/migrations/config \
+            --config-file-name schemachange-config.yml \
+            --connections-file-path bronze/migrations/config/connections.toml \
+            --connection-name snowflake \
+            --modules-folder bronze/migrations/scripts \
+            --change-history-table BRONZE.DEV.CHANGE_HISTORY \
+            --query-tag "schemachange-dev"
+
+      # - name: Run migrations 
+
+      #   run: |
+      #     for layer in bronze silver gold; do
+      #       echo "Dry-run migrations for $layer in DEV schema"
+      #       schemachange deploy \
+      #         --config-folder "$GITHUB_WORKSPACE/$layer/migrations/config" \
+      #         --config-file-name schemachange-config.yml \
+      #         --connections-file-path "$GITHUB_WORKSPACE/$layer/migrations/config/connections.toml" \
+      #         --connection-name snowflake \
+      #         --modules-folder "$GITHUB_WORKSPACE/$layer/migrations/scripts" \
+      #         --change-history-table BRONZE.DEV.CHANGE_HISTORY \
+      #         --dry-run
+      #         --query-tag "schemachange-dev"
+      #       echo "Running migrations for $layer in DEV schema"
+      #       schemachange deploy \
+      #         --config-folder "$GITHUB_WORKSPACE/$layer/migrations/config" \
+      #         --config-file-name schemachange-config.yml \
+      #         --connections-file-path "$GITHUB_WORKSPACE/$layer/migrations/config/connections.toml" \
+      #         --connection-name snowflake \
+      #         --modules-folder "$GITHUB_WORKSPACE/$layer/migrations/scripts" \
+      #         --change-history-table BRONZE.DEV.CHANGE_HISTORY \
+      #         --query-tag "schemachange-dev"
+      #     done
 
   deploy-test:
     runs-on: ubuntu-latest
