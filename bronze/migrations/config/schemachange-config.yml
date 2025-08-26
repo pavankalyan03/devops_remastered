@@ -1,6 +1,5 @@
 config-version: 1
-# root-folder: .
-modules-folder: scripts
+root-folder: ./bronze/migrations/scripts
 # connections-file-path: ./connections.toml
 # connection-name: snowflake
 change-history-table: BRONZE.DEV.change_history
