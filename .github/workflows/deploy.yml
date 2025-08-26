@@ -37,6 +37,50 @@ jobs:
           python -m pip install --upgrade pip
           pip install schemachange
 
+      - name: Write connections for bronze/silver/gold
+        run: |
+          # bronze
+          mkdir -p bronze/migrations/config
+          cat > bronze/migrations/config/connections.toml <<EOF
+          [snowflake]
+          account   = "${{ secrets.SNOWFLAKE_ACCOUNT }}"
+          user      = "${{ secrets.SNOWFLAKE_USER }}"
+          password  = "${{ secrets.SNOWFLAKE_PASSWORD }}"
+          role      = "${{ secrets.SNOWFLAKE_ROLE }}"
+          warehouse = "${{ secrets.SNOWFLAKE_WAREHOUSE }}"
+          database  = "BRONZE"
+          schema    = "DEV"
+          EOF
+          chmod 600 bronze/migrations/config/connections.toml
+
+          # silver
+          mkdir -p silver/migrations/config
+          cat > silver/migrations/config/connections.toml <<EOF
+          [snowflake]
+          account   = "${{ secrets.SNOWFLAKE_ACCOUNT }}"
+          user      = "${{ secrets.SNOWFLAKE_USER }}"
+          password  = "${{ secrets.SNOWFLAKE_PASSWORD }}"
+          role      = "${{ secrets.SNOWFLAKE_ROLE }}"
+          warehouse = "${{ secrets.SNOWFLAKE_WAREHOUSE }}"
+          database  = "SILVER"
+          schema    = "DEV"
+          EOF
+          chmod 600 silver/migrations/config/connections.toml
+
+          # gold
+          mkdir -p gold/migrations/config
+          cat > gold/migrations/config/connections.toml <<EOF
+          [snowflake]
+          account   = "${{ secrets.SNOWFLAKE_ACCOUNT }}"
+          user      = "${{ secrets.SNOWFLAKE_USER }}"
+          password  = "${{ secrets.SNOWFLAKE_PASSWORD }}"
+          role      = "${{ secrets.SNOWFLAKE_ROLE }}"
+          warehouse = "${{ secrets.SNOWFLAKE_WAREHOUSE }}"
+          database  = "GOLD"
+          schema    = "DEV"
+          EOF
+          chmod 600 gold/migrations/config/connections.toml
+
       - name: Debug connections.toml content per layer
         run: |
           for layer in bronze silver gold; do

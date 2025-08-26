@@ -1,8 +1,8 @@
 [snowflake]
-account   = "env:SNOWFLAKE_ACCOUNT"
-user      = "env:SNOWFLAKE_USER"
-password  = "env:SNOWFLAKE_PASSWORD"
+account   = "your_account_name"      # e.g. ab12345.eu-west-1
+user      = "github_bot"
+password  = "********"
 role      = "ACCOUNTADMIN"
 warehouse = "COMPUTE_WH"
-database  = "GOLD"
+database  = "BRONZE"
 schema    = "DEV"
