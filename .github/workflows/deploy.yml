@@ -40,8 +40,8 @@ jobs:
           for layer in bronze silver gold; do
             echo "Dry-run migrations for $layer in DEV schema"
             schemachange deploy \
-              --config-folder "$GITHUB_WORKSPACE/$layer/migrations/config" \
-              --config-file-name schemachange-config.yml \
+              --config-folder "$GITHUB_WORKSPACE/$layer/migrations" \
+              --config-file-name config/schemachange-config.yml \
               --connections-file-path "$GITHUB_WORKSPACE/$layer/migrations/config/connections.toml" \
               --connection-name snowflake \
               --dry-run \
@@ -49,8 +49,8 @@ jobs:
               --query-tag "schemachange-dev"
             echo "Running migrations for $layer in DEV schema"
             schemachange deploy \
-              --config-folder "$GITHUB_WORKSPACE/$layer/migrations/config" \
-              --config-file-name schemachange-config.yml \
+              --config-folder "$GITHUB_WORKSPACE/$layer/migrations" \
+              --config-file-name config/schemachange-config.yml \
               --connections-file-path "$GITHUB_WORKSPACE/$layer/migrations/config/connections.toml" \
               --connection-name snowflake \
               --change-history-table BRONZE.DEV.CHANGE_HISTORY \
@@ -88,8 +88,8 @@ jobs:
           for layer in bronze silver gold; do
             echo "Dry-run migrations for $layer in TEST schema"
             schemachange deploy \
-              --config-folder "$GITHUB_WORKSPACE/$layer/migrations/config" \
-              --config-file-name schemachange-config.yml \
+              --config-folder "$GITHUB_WORKSPACE/$layer/migrations" \
+              --config-file-name config/schemachange-config.yml \
               --connections-file-path "$GITHUB_WORKSPACE/$layer/migrations/config/connections.toml" \
               --connection-name snowflake \
               --dry-run \
@@ -97,8 +97,8 @@ jobs:
               --query-tag "schemachange-test"
             echo "Running migrations for $layer in TEST schema"
             schemachange deploy \
-              --config-folder "$GITHUB_WORKSPACE/$layer/migrations/config" \
-              --config-file-name schemachange-config.yml \
+              --config-folder "$GITHUB_WORKSPACE/$layer/migrations" \
+              --config-file-name config/schemachange-config.yml \
               --connections-file-path "$GITHUB_WORKSPACE/$layer/migrations/config/connections.toml" \
               --connection-name snowflake \
               --change-history-table APP_DB.TEST.CHANGE_HISTORY \
@@ -136,8 +136,8 @@ jobs:
           for layer in bronze silver gold; do
             echo "Dry-run migrations for $layer in PROD schema"
             schemachange deploy \
-              --config-folder "$GITHUB_WORKSPACE/$layer/migrations/config" \
-              --config-file-name schemachange-config.yml \
+              --config-folder "$GITHUB_WORKSPACE/$layer/migrations" \
+              --config-file-name config/schemachange-config.yml \
               --connections-file-path "$GITHUB_WORKSPACE/$layer/migrations/config/connections.toml" \
               --connection-name snowflake \
               --dry-run \
@@ -145,8 +145,8 @@ jobs:
               --query-tag "schemachange-prod"
             echo "Running migrations for $layer in PROD schema"
             schemachange deploy \
-              --config-folder "$GITHUB_WORKSPACE/$layer/migrations/config" \
-              --config-file-name schemachange-config.yml \
+              --config-folder "$GITHUB_WORKSPACE/$layer/migrations" \
+              --config-file-name config/schemachange-config.yml \
               --connections-file-path "$GITHUB_WORKSPACE/$layer/migrations/config/connections.toml" \
               --connection-name snowflake \
               --change-history-table APP_DB.PROD.CHANGE_HISTORY \
