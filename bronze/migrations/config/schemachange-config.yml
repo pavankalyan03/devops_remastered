@@ -1,16 +1,17 @@
 config-version: 1
-root-folder: bronze/migrations/scripts
+# root-folder: bronze/migrations/scripts
 # connections-file-path: ./connections.toml
 # connection-name: snowflake
-change-history-table: BRONZE.DEV.change_history
+# change-history-table: BRONZE.DEV.change_history
 vars:
   CUSTOMER_TABLE: 'CUSTOMERS'
+  RETAILERS_TABLE: 'RETAILERS'
   DATABASE : BRONZE
   SCHEMA : DEV
   secrets:
     CUSTOMER_SECRET: 'super_secret_value'
 create-change-history-table: true
 autocommit: true
-verbose: false
-dry-run: false
-query-tag: 'bronze_deploy'
+# verbose: false
+# dry-run: false
+# query-tag: 'bronze_deploy'
