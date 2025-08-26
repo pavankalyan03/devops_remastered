@@ -1,12 +1,16 @@
 config-version: 1
 root-folder: '../scripts'
-modules-folder: null
-connections-file-path: '../connections.toml'
-connection-name: snowflake
-change-history-table: CHANGE_HISTORY
+connections-file-path: './connections.toml'
+connection-name: silver
+change-history-table: SILVER.DEV.change_history
+vars:
+  CUSTOMER_TABLE: 'CUSTOMERS'
+  DATABASE : SILVER
+  SCHEMA : DEV
+  secrets:
+    CUSTOMER_SECRET: 'super_secret_value'
 create-change-history-table: true
-autocommit: false
-verbose: true
+autocommit: true
+verbose: false
 dry-run: false
-query-tag: 'schemachange'
-vars-file-path: '../vars.yml'
+query-tag: 'bronze_deploy'

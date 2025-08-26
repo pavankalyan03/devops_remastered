@@ -45,7 +45,7 @@ jobs:
               --connections-file-path "$GITHUB_WORKSPACE/$layer/migrations/config/connections.toml" \
               --connection-name snowflake \
               --dry-run \
-              --change-history-table APP_DB.DEV.CHANGE_HISTORY \
+              --change-history-table BRONZE.DEV.CHANGE_HISTORY \
               --query-tag "schemachange-dev"
             echo "Running migrations for $layer in DEV schema"
             schemachange deploy \
@@ -53,7 +53,7 @@ jobs:
               --config-file-name schemachange-config.yml \
               --connections-file-path "$GITHUB_WORKSPACE/$layer/migrations/config/connections.toml" \
               --connection-name snowflake \
-              --change-history-table APP_DB.DEV.CHANGE_HISTORY \
+              --change-history-table BRONZE.DEV.CHANGE_HISTORY \
               --query-tag "schemachange-dev"
           done
 

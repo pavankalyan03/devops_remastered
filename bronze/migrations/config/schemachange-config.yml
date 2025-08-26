@@ -2,11 +2,11 @@ config-version: 1
 root-folder: '../scripts'
 connections-file-path: './connections.toml'
 connection-name: bronze
-change-history-table: bronze_db.metadata.schemachange.change_history
+change-history-table: BRONZE.DEV.change_history
 vars:
   CUSTOMER_TABLE: 'CUSTOMERS'
-  DATABASE : APP_DB
-  SCHEMA : BRONZE
+  DATABASE : BRONZE
+  SCHEMA : DEV
   secrets:
     CUSTOMER_SECRET: 'super_secret_value'
 create-change-history-table: true
