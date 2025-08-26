@@ -1,7 +1,7 @@
 config-version: 1
 # root-folder: .
 modules-folder: scripts
-connections-file-path: ./connections.toml
+# connections-file-path: ./connections.toml
 connection-name: snowflake
 change-history-table: BRONZE.DEV.change_history
 vars:
