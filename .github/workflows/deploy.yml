@@ -12,11 +12,6 @@ jobs:
   deploy-dev:
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        layer: [bronze, silver, gold]
-
-
     if: github.ref_name == 'dev'
     environment: dev
     env:
@@ -96,7 +91,7 @@ jobs:
             cat "$GITHUB_WORKSPACE/$layer/migrations/config/connections.toml"
           done
 
-      - name: Deploy to ${{ matrix.layer }}
+      - name: Deploy nowww
         run: |
           for layer in bronze silver gold; do
             echo "🚀 Deploying $layer layer..."
