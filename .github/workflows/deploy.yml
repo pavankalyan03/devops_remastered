@@ -91,13 +91,14 @@ jobs:
       - name: Deploy Bronze
         run: |
           schemachange deploy \
-            --root-folder bronze/migrations/scripts \
-            --config-folder bronze/migrations/config \
+            -f "$GITHUB_WORKSPACE/bronze/migrations" \
+            --config-folder "$GITHUB_WORKSPACE/bronze/migrations/config" \
             --config-file-name schemachange-config.yml \
-            --connections-file-path bronze/migrations/config/connections.toml \
+            --connections-file-path "$GITHUB_WORKSPACE/bronze/migrations/config/connections.toml" \
             --connection-name snowflake \
             --change-history-table BRONZE.DEV.CHANGE_HISTORY \
-            --query-tag "schemachange-dev"
+            --query-tag "schemachange-bronze" \
+            --verbose
 
       # - name: Run migrations 
 
