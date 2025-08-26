@@ -2,7 +2,7 @@ config-version: 1
 # root-folder: .
 modules-folder: scripts
 connections-file-path: ./connections.toml
-connection: snowflake
+connection-name: snowflake
 change-history-table: SILVER.DEV.change_history
 vars:
   CUSTOMER_TABLE: 'CUSTOMERS'
