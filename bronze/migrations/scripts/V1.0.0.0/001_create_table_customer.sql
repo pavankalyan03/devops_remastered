@@ -1,7 +1,7 @@
-USE {{ database }};
-USE SCHEMA {{ schema }};
+USE {{ DATABASE }};
+USE SCHEMA {{ SECHMA }};
 
-CREATE TABLE IF NOT EXISTS {{ database }}.{{ schema }}.{{ customer_table }} (
+CREATE TABLE IF NOT EXISTS {{ DATABASE }}.{{ SCHEMA }}.{{ CUSTOMER_TABLE }} (
     id INT PRIMARY KEY,
     name STRING NOT NULL
 );
