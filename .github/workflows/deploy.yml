@@ -11,6 +11,12 @@ on:
 jobs:
   deploy-dev:
     runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        layer: [bronze, silver, gold]
+
+
     if: github.ref_name == 'dev'
     environment: dev
     env:
@@ -21,6 +27,8 @@ jobs:
       SNOWFLAKE_WAREHOUSE: COMPUTE_WH
       SNOWFLAKE_DATABASE: BRONZE
       SNOWFLAKE_SCHEMA: DEV
+
+    
 
     name: Deploy to DEV
     steps:
@@ -88,16 +96,16 @@ jobs:
             cat "$GITHUB_WORKSPACE/$layer/migrations/config/connections.toml"
           done
 
-      - name: Deploy Bronze
+      - name: Deploy to ${{ matrix.layer }}
         run: |
           schemachange deploy \
-            -f "$GITHUB_WORKSPACE/bronze/migrations" \
-            --config-folder "$GITHUB_WORKSPACE/bronze/migrations/config" \
+            -f "$GITHUB_WORKSPACE/${{ matrix.layer }}/migrations" \
+            --config-folder "$GITHUB_WORKSPACE/${{ matrix.layer }}/migrations/config" \
             --config-file-name schemachange-config.yml \
-            --connections-file-path "$GITHUB_WORKSPACE/bronze/migrations/config/connections.toml" \
+            --connections-file-path "$GITHUB_WORKSPACE/${{ matrix.layer }}/migrations/config/connections.toml" \
             --connection-name snowflake \
-            --change-history-table BRONZE.DEV.CHANGE_HISTORY \
-            --query-tag "schemachange-bronze" \
+            --change-history-table "${{ matrix.layer | upper }}.DEV.CHANGE_HISTORY" \
+            --query-tag "schemachange-${{ matrix.layer }}" \
             --verbose
 
       # - name: Run migrations 

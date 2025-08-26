@@ -1,17 +1,12 @@
 config-version: 1
-# root-folder: .
-modules-folder: scripts
-# connections-file-path: ./connections.toml
-# connection-name: snowflake
-change-history-table: GOLD.DEV.change_history
+
+
 vars:
-  CUSTOMER_TABLE: 'CUSTOMERS'
-  DATABASE : GOLD
-  SCHEMA : DEV
-  secrets:
-    CUSTOMER_SECRET: 'super_secret_value'
+  DATABASE: GOLD
+  SCHEMA: DEV
+  SILVER_DB: SILVER
+  SILVER_SCHEMA: DEV
+
+
 create-change-history-table: true
 autocommit: true
-verbose: false
-dry-run: false
-query-tag: 'bronze_deploy'
