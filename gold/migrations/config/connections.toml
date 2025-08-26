@@ -1,8 +1,9 @@
 [snowflake]
-account = "${{ secrets.SNOWFLAKE_ACCOUNT }}"
-user = "${{ secrets.SNOWFLAKE_USER }}"
-password = "${{ secrets.SNOWFLAKE_PASSWORD }}"
-role = "${{ secrets.SNOWFLAKE_ROLE }}"
-warehouse = "${{ secrets.SNOWFLAKE_WAREHOUSE }}"
-database = "SILVER"   # replace with actual database
-schema = "DEV"       # replace with actual schema
+type = "snowflake"
+account = "${SNOWFLAKE_ACCOUNT}"
+user = "${SNOWFLAKE_USER}"
+password = "${SNOWFLAKE_PASSWORD}"
+role = "${SNOWFLAKE_ROLE}"
+warehouse = "${SNOWFLAKE_WAREHOUSE}"
+database = "GOLD"
+schema = "DEV"

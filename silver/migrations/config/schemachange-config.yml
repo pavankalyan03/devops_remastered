@@ -2,11 +2,11 @@ config-version: 1
 # root-folder: .
 modules-folder: scripts
 connections-file-path: ./connections.toml
-connection-name: gold
-change-history-table: GOLD.DEV.change_history
+connection: snowflake
+change-history-table: SILVER.DEV.change_history
 vars:
   CUSTOMER_TABLE: 'CUSTOMERS'
-  DATABASE : GOLD
+  DATABASE : SILVER
   SCHEMA : DEV
   secrets:
     CUSTOMER_SECRET: 'super_secret_value'
