@@ -34,6 +34,7 @@ jobs:
         run: |
           # bronze
           mkdir -p bronze/migrations/config
+          : > bronze/migrations/config/connections.toml
           cat > bronze/migrations/config/connections.toml <<EOF
           [snowflake]
           account   = "${{ secrets.SNOWFLAKE_ACCOUNT }}"
@@ -42,12 +43,13 @@ jobs:
           role      = "${{ secrets.SNOWFLAKE_ROLE }}"
           warehouse = "${{ secrets.SNOWFLAKE_WAREHOUSE }}"
           database  = "BRONZE"
-          schema    = "DEV"
+          schema    = "TEST"
           EOF
           chmod 600 bronze/migrations/config/connections.toml
 
           # silver
           mkdir -p silver/migrations/config
+          : > silver/migrations/config/connections.toml
           cat > silver/migrations/config/connections.toml <<EOF
           [snowflake]
           account   = "${{ secrets.SNOWFLAKE_ACCOUNT }}"
@@ -56,12 +58,13 @@ jobs:
           role      = "${{ secrets.SNOWFLAKE_ROLE }}"
           warehouse = "${{ secrets.SNOWFLAKE_WAREHOUSE }}"
           database  = "SILVER"
-          schema    = "DEV"
+          schema    = "TEST"
           EOF
           chmod 600 silver/migrations/config/connections.toml
 
           # gold
           mkdir -p gold/migrations/config
+          : > gold/migrations/config/connections.toml
           cat > gold/migrations/config/connections.toml <<EOF
           [snowflake]
           account   = "${{ secrets.SNOWFLAKE_ACCOUNT }}"
@@ -70,7 +73,7 @@ jobs:
           role      = "${{ secrets.SNOWFLAKE_ROLE }}"
           warehouse = "${{ secrets.SNOWFLAKE_WAREHOUSE }}"
           database  = "GOLD"
-          schema    = "DEV"
+          schema    = "TEST"
           EOF
           chmod 600 gold/migrations/config/connections.toml
 
@@ -146,7 +149,7 @@ jobs:
 
           # silver
           mkdir -p silver/migrations/config
-          : > bronze/migrations/config/connections.toml
+          : > silver/migrations/config/connections.toml
           cat > silver/migrations/config/connections.toml <<EOF
           [snowflake]
           account   = "${{ secrets.SNOWFLAKE_ACCOUNT }}"
@@ -161,7 +164,7 @@ jobs:
 
           # gold
           mkdir -p gold/migrations/config
-          : > bronze/migrations/config/connections.toml
+          : > gold/migrations/config/connections.toml
           cat > gold/migrations/config/connections.toml <<EOF
           [snowflake]
           account   = "${{ secrets.SNOWFLAKE_ACCOUNT }}"
@@ -232,6 +235,7 @@ jobs:
         run: |
           # bronze
           mkdir -p bronze/migrations/config
+          : > bronze/migrations/config/connections.toml
           cat > bronze/migrations/config/connections.toml <<EOF
           [snowflake]
           account   = "${{ secrets.SNOWFLAKE_ACCOUNT }}"
@@ -240,12 +244,13 @@ jobs:
           role      = "${{ secrets.SNOWFLAKE_ROLE }}"
           warehouse = "${{ secrets.SNOWFLAKE_WAREHOUSE }}"
           database  = "BRONZE"
-          schema    = "PROD"
+          schema    = "TEST"
           EOF
           chmod 600 bronze/migrations/config/connections.toml
 
           # silver
           mkdir -p silver/migrations/config
+          : > silver/migrations/config/connections.toml
           cat > silver/migrations/config/connections.toml <<EOF
           [snowflake]
           account   = "${{ secrets.SNOWFLAKE_ACCOUNT }}"
@@ -254,12 +259,13 @@ jobs:
           role      = "${{ secrets.SNOWFLAKE_ROLE }}"
           warehouse = "${{ secrets.SNOWFLAKE_WAREHOUSE }}"
           database  = "SILVER"
-          schema    = "PROD"
+          schema    = "TEST"
           EOF
           chmod 600 silver/migrations/config/connections.toml
 
           # gold
           mkdir -p gold/migrations/config
+          : > gold/migrations/config/connections.toml
           cat > gold/migrations/config/connections.toml <<EOF
           [snowflake]
           account   = "${{ secrets.SNOWFLAKE_ACCOUNT }}"
@@ -268,10 +274,11 @@ jobs:
           role      = "${{ secrets.SNOWFLAKE_ROLE }}"
           warehouse = "${{ secrets.SNOWFLAKE_WAREHOUSE }}"
           database  = "GOLD"
-          schema    = "PROD"
+          schema    = "TEST"
           EOF
           chmod 600 gold/migrations/config/connections.toml
 
+          
       - name: Debug connections.toml content per layer
         run: |
           for layer in bronze silver gold; do
