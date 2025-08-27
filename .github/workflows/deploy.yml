@@ -84,7 +84,7 @@ jobs:
       - name: Deploy nowww
         run: |
           for layer in bronze silver gold; do
-            echo "🚀 Deploying $layer layer..."
+            echo "Deploying $layer layer in Dev Env..."
             schemachange deploy \
               -f "$GITHUB_WORKSPACE/$layer/migrations" \
               --config-folder "$GITHUB_WORKSPACE/$layer/migrations/config" \
@@ -131,6 +131,7 @@ jobs:
         run: |
           # bronze
           mkdir -p bronze/migrations/config
+          : > bronze/migrations/config/connections.toml
           cat > bronze/migrations/config/connections.toml <<EOF
           [snowflake]
           account   = "${{ secrets.SNOWFLAKE_ACCOUNT }}"
@@ -145,6 +146,7 @@ jobs:
 
           # silver
           mkdir -p silver/migrations/config
+          : > bronze/migrations/config/connections.toml
           cat > silver/migrations/config/connections.toml <<EOF
           [snowflake]
           account   = "${{ secrets.SNOWFLAKE_ACCOUNT }}"
@@ -159,6 +161,7 @@ jobs:
 
           # gold
           mkdir -p gold/migrations/config
+          : > bronze/migrations/config/connections.toml
           cat > gold/migrations/config/connections.toml <<EOF
           [snowflake]
           account   = "${{ secrets.SNOWFLAKE_ACCOUNT }}"
@@ -181,7 +184,7 @@ jobs:
       - name: Deploy nowww
         run: |
           for layer in bronze silver gold; do
-            echo "🚀 Deploying $layer layer..."
+            echo "Now Deploying $layer layer..."
             schemachange deploy \
               -f "$GITHUB_WORKSPACE/$layer/migrations" \
               --config-folder "$GITHUB_WORKSPACE/$layer/migrations/config" \
@@ -197,7 +200,7 @@ jobs:
   deploy-prod:
     runs-on: ubuntu-latest
 
-    if: github.ref_name == 'prod'
+    if: github.ref_name == 'main'
     environment: prod
     env:
       SNOWFLAKE_ACCOUNT: ${{ secrets.SNOWFLAKE_ACCOUNT }}
@@ -279,7 +282,7 @@ jobs:
       - name: Deploy nowww
         run: |
           for layer in bronze silver gold; do
-            echo "🚀 Deploying $layer layer..."
+            echo "Now Deploying $layer layer In prod Env Be carefull friend..."
             schemachange deploy \
               -f "$GITHUB_WORKSPACE/$layer/migrations" \
               --config-folder "$GITHUB_WORKSPACE/$layer/migrations/config" \

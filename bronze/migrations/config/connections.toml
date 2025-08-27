@@ -1,8 +1,0 @@
-[snowflake]
-account   = "your_account_name"      # e.g. ab12345.eu-west-1
-user      = "github_bot"
-password  = "********"
-role      = "ACCOUNTADMIN"
-warehouse = "COMPUTE_WH"
-database  = "BRONZE"
-schema    = "DEV"
