@@ -10,34 +10,34 @@ C:.
 |           
 +---bronze
 |   \---migrations
-|       |   var.yml
-|       |   
 |       +---config
 |       |       schemachange-config.yml
 |       |       
 |       \---scripts
-|           \---V1.0.0.0
-|                   001_create_table_customer.sql
-|                   
+|           +---V1.0.0
+|           |       V1__create_customer_table.sql
+|           |       
+|           \---V2.0.0
+|                   V2__create_table_orders.sql
+|      
+|             
 +---gold
 |   \---migrations
-|       |   var.yml
-|       |   
 |       +---config
 |       |       schemachange-config.yml
 |       |       
 |       \---scripts
 |           \---V1.0.0.0
-|                   001_create_aggreate_sales.sql
+|                   V1__create_table_sales_summary.sql
+|
+|
 |                   
 \---silver
     \---migrations
-        |   var.yml
-        |   
         +---config
         |       schemachange-config.yml
         |       
         \---scripts
             \---V1.0.0.0
-                    001_create_view_customer_ordes.sql
+                    V1__create_view_customer_ordes.sql
                     
